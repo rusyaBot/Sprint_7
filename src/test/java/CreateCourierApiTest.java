@@ -9,43 +9,42 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-public class CreateCourierTest {
+public class CreateCourierApiTest extends Constant {
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     String login = "Garri" + randomNumber;
     String password = "1234";
-    CreateCourier createCourier = new CreateCourier("", "", "");
+    CreateCourierApi createCourierApi = new CreateCourierApi();
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-        DeleteCourier deleteCourier = new DeleteCourier("", "");
-        deleteCourier.deleteCourier(login, password);
+        RestAssured.baseURI = BASEURI;
+        DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
+        deleteCourierApi.deleteCourier(login, password);
     }
-
 
     @Test // Создание курьера. Ответ 201
     @DisplayName("createNewCourier") // имя теста
     @Description("Создание курьера. Ответ 201") // описание теста
     public void createNewCourier() {
-        int statusCode = createCourier.createCourier(login, password, "Potter");
-        assertEquals(statusCode,201);
+        int statusCode = createCourierApi.createCourier(login, password, "Potter");
+        assertEquals(201, statusCode);
     }
 
     @Test // Создание курьера нет пароля. Ответ 400
     @DisplayName("createNewCourierNoPassword") // имя теста
     @Description("Создание курьера нет пароля. Ответ 400") // описание теста
     public void createNewCourierNoPassword() {
-        int statusCode = createCourier.createCourier(login, "", "Potter");
-        assertEquals(statusCode,400);
+        int statusCode = createCourierApi.createCourier(login, "", "Potter");
+        assertEquals(400, statusCode);
     }
 
     @Test // Создание курьера нет логина. Ответ 400
     @DisplayName("createNewCourierNologin") // имя теста
     @Description("Создание курьера нет логина. Ответ 400") // описание теста
     public void createNewCourierNologin() {
-        int statusCode = createCourier.createCourier("", password, "Potter");
-        assertEquals(statusCode,400);
+        int statusCode = createCourierApi.createCourier("", password, "Potter");
+        assertEquals(400, statusCode);
     }
 
 
@@ -54,18 +53,18 @@ public class CreateCourierTest {
     @Description("Создание курьера логин уже используется. Ответ 409") // описание теста
     public void createNewCourierLoginInUse() {
         // Step1 Создание курьера
-        createCourier.createCourier(login, password, "Potter");
+        createCourierApi.createCourier(login, password, "Potter");
         // Step2 Создание курьера2 с тем же логином
-        int statusCode = createCourier.createCourier(login, password, "Potter");
-        assertEquals(statusCode,409);
+        int statusCode = createCourierApi.createCourier(login, password, "Potter");
+        assertEquals(409, statusCode);
     }
 
     @After // Удаление курьера
-    @DisplayName("deleteCourierTest") // имя теста
-    @Description("Удаление курьера") // описание теста
+    @DisplayName("deleteCourier") // имя
+    @Description("Удаление курьера") // описание
     public void deleteCourierTest() {
-        DeleteCourier deleteCourier = new DeleteCourier("", "");
-        deleteCourier.deleteCourier(login, password);
+        DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
+        deleteCourierApi.deleteCourier(login, password);
     }
 
 

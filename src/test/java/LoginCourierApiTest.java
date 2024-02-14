@@ -12,21 +12,21 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 
-public class LoginCourierTest {
+public class LoginCourierApiTest extends Constant{
 
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     String login = "Garri" + randomNumber;
     String password = "1234";
-    CreateCourier createCourier = new CreateCourier("", "", "");
-    LoginCourier loginCourier = new LoginCourier("", "");
+    CreateCourierApi createCourierApi = new CreateCourierApi();
+    LoginCourierApi loginCourierApi = new LoginCourierApi();
 
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
-        DeleteCourier deleteCourier = new DeleteCourier("", "");
-        deleteCourier.deleteCourier(login, password);
-        createCourier.createCourier(login, password, "Potter");
+        RestAssured.baseURI = BASEURI;
+        DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
+        deleteCourierApi.deleteCourier(login, password);
+        createCourierApi.createCourier(login, password, "Potter");
     }
 
     @Test // Авторизация курьера. Код 200
@@ -34,18 +34,18 @@ public class LoginCourierTest {
     @Description("Авторизация курьера. Код 200") // описание теста
     public void checkIdCourier() {
         // Step1 Проверка код 200
-        int statusCode = loginCourier.checkStatusCodeCourier(login, password);
+        int statusCode = loginCourierApi.checkStatusCodeCourier(login, password);
         assertEquals(200, statusCode);
         // Step2 Проверка id курьера
-        Long IdCourier = loginCourier.checkIdCourier(login, password);
-        Assert.assertTrue(IdCourier != 0);
+        Long idCourier = loginCourierApi.checkIdCourier(login, password);
+        Assert.assertTrue(idCourier != 0);
     }
 
     @Test // Авторизация курьера. Без логина. Код 400
     @DisplayName("authorizationCourierNologin") // имя теста
     @Description("Авторизация курьера. Без логина. Код 400") // описание теста
     public void authorizationCourierNologin() {
-        int statusCode = loginCourier.checkStatusCodeCourier("", password);
+        int statusCode = loginCourierApi.checkStatusCodeCourier("", password);
         assertEquals(400, statusCode);
     }
 
@@ -53,7 +53,7 @@ public class LoginCourierTest {
     @DisplayName("authorizationCourierNoPassword") // имя теста
     @Description("Авторизация курьера. Без пароля. Код 400") // описание теста
     public void authorizationCourierNoPassword() {
-        int statusCode = loginCourier.checkStatusCodeCourier(login, "");
+        int statusCode = loginCourierApi.checkStatusCodeCourier(login, "");
         assertEquals(400, statusCode);
     }
 
@@ -61,7 +61,7 @@ public class LoginCourierTest {
     @DisplayName("authorizationCourierNoUser") // имя теста
     @Description("Авторизация курьера. Не существующий клиент. Код 404") // описание теста
     public void authorizationCourierNoUser() {
-        int statusCode = loginCourier.checkStatusCodeCourier(login + "NoUser", password);
+        int statusCode = loginCourierApi.checkStatusCodeCourier(login + "NoUser", password);
         assertEquals(404, statusCode);
     }
 
@@ -69,17 +69,17 @@ public class LoginCourierTest {
     @DisplayName("authorizationCourierIncorrectPassword") // имя теста
     @Description("Авторизация курьера. Не верный пароль. Код 404") // описание теста
     public void authorizationCourierIncorrectPassword() {
-        int statusCode = loginCourier.checkStatusCodeCourier(login, "12345");
+        int statusCode = loginCourierApi.checkStatusCodeCourier(login, "12345");
         assertEquals(404, statusCode);
     }
 
 
     @After // Удаление курьера
-    @DisplayName("deleteCourierTest") // имя теста
-    @Description("Удаление курьера") // описание теста
+    @DisplayName("deleteCourier") // имя
+    @Description("Удаление курьера") // описание
     public void deleteCourierTest() {
-        DeleteCourier deleteCourier = new DeleteCourier("", "");
-        deleteCourier.deleteCourier(login, password);
+        DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
+        deleteCourierApi.deleteCourier(login, password);
     }
 
 }

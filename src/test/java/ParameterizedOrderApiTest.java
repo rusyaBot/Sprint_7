@@ -3,23 +3,25 @@ import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
-
 import java.util.List;
 
+import static org.junit.Assert.assertEquals;
+
 @RunWith(Parameterized.class)
-public class OrdersTest {
+public class ParameterizedOrderApiTest extends Constant{
     private List<String> color;
     private int statusCode;
 
-    public OrdersTest(List<String> color, int statusCode) {
+    public ParameterizedOrderApiTest(List<String> color, int statusCode) {
         this.color = color;
         this.statusCode = statusCode;
     }
+
+    OrderApi orderApi = new OrderApi();
 
     @Parameterized.Parameters
     public static Object[][] getColor() {
@@ -32,18 +34,16 @@ public class OrdersTest {
         };
     }
 
-    Orders orders = new Orders("", "", "", "", "", 0, "", "", color);
-
     @Before
     public void setUp() {
-        RestAssured.baseURI = "http://qa-scooter.praktikum-services.ru";
+        RestAssured.baseURI = BASEURI;
     }
 
     @Test // Создание заказа. Ответ 201
     @DisplayName("createNewOrders") // имя теста
     @Description("Создание заказа. Ответ 201") // описание теста
     public void createNewOrders() {
-        int ordersTrack = orders.creatingOrder(
+        int statusCodeOrder = orderApi.creatOrder(
                 "Garri",
                 "Potter",
                 "Hogwarts 777",
@@ -53,15 +53,14 @@ public class OrdersTest {
                 "2020-06-06",
                 "Valera, nastalo tvoyo vremya",
                 color);
-        System.out.println(ordersTrack);
-        Assert.assertTrue(ordersTrack != 0);
+        assertEquals(statusCode, statusCodeOrder);
     }
 
     @Test // Создание-Ответ 201. Проверка заказа в списке -Ответ 200.
     @DisplayName("checkNewOrders") // имя теста
     @Description("Создание-Ответ 201. Проверка заказа в списке -Ответ 200.") // описание теста
     public void checkNewOrders() {
-        int ordersTrack = orders.creatingOrderGetTrack(
+        int ordersTrack = orderApi.creatOrderGetTrack(
                 "Garri",
                 "Potter",
                 "Hogwarts 777",
@@ -71,7 +70,7 @@ public class OrdersTest {
                 "2020-06-06",
                 "Valera, nastalo tvoyo vremya",
                 color);
-        orders.ordersList(
+        orderApi.ordersList(
                 "Garri",
                 "Potter",
                 "Hogwarts 777",

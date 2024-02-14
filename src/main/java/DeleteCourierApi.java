@@ -2,39 +2,16 @@ import io.restassured.response.Response;
 
 import static io.restassured.RestAssured.given;
 
-public class DeleteCourier {
-    private String login;
-    private String password;
-
-    public DeleteCourier(String login, String password) {
-        this.login = login;
-        this.password = password;
-    }
-
-    public String getLogin() {
-        return login;
-    }
-
-    public void setLogin(String login) {
-        this.login = login;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
+public class DeleteCourierApi {
 
     public void deleteCourier(String login, String password) {
         // Удаление курьера через доп проверки, для стабильности тестов.
         // Вариант логин есть, но пароль не верный, не делал, так как не найти id курьера если не подходит логин+парроль.
-        DeleteCourier deleteCourier = new DeleteCourier(login, password);
+        Courier courier = new Courier(login, password);
         Response response1 =
                 given()
                         .header("Content-type", "application/json") // заполнил header
-                        .log().all().body(deleteCourier) // заполнил body
+                        .body(courier) // заполнил body
                         .when()
                         .post("/api/v1/courier/login")// отправить запрос в ручку
                         .then().extract().response();
