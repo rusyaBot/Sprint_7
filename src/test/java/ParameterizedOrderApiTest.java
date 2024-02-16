@@ -12,7 +12,7 @@ import java.util.List;
 import static org.junit.Assert.assertEquals;
 
 @RunWith(Parameterized.class)
-public class ParameterizedOrderApiTest extends Constant{
+public class ParameterizedOrderApiTest {
     private List<String> color;
     private int statusCode;
 
@@ -34,10 +34,10 @@ public class ParameterizedOrderApiTest extends Constant{
         };
     }
 
+    BaseUrl baseUrl = new BaseUrl();
     @Before
     public void setUp() {
-        RestAssured.baseURI = BASEURI;
-    }
+        baseUrl.getBaseUrl();}
 
     @Test // Создание заказа. Ответ 201
     @DisplayName("createNewOrders") // имя теста

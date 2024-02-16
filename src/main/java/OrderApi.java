@@ -51,15 +51,11 @@ public class OrderApi {
                 .and().body("order.track", equalTo(orderTrack));
     }
 
-    public Response ordersListNotNull(){
+    public Response ordersListNotNull() {
         Response response =
                 given()
                         .get(apiPath);
-        if (response != null) {
-            return response;
-        } else {
-            return null;
-        }
+        return response;
     }
 
 

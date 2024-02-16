@@ -9,16 +9,16 @@ import java.util.Random;
 
 import static org.junit.Assert.assertEquals;
 
-public class CreateCourierApiTest extends Constant {
+public class CreateCourierApiTest {
     Random random = new Random();
     int randomNumber = random.nextInt(100);
     String login = "Garri" + randomNumber;
     String password = "1234";
     CreateCourierApi createCourierApi = new CreateCourierApi();
-
+    BaseUrl baseUrl = new BaseUrl();
     @Before
     public void setUp() {
-        RestAssured.baseURI = BASEURI;
+        baseUrl.getBaseUrl();
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         deleteCourierApi.deleteCourier(login, password);
     }
@@ -60,8 +60,6 @@ public class CreateCourierApiTest extends Constant {
     }
 
     @After // Удаление курьера
-    @DisplayName("deleteCourier") // имя
-    @Description("Удаление курьера") // описание
     public void deleteCourierTest() {
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         deleteCourierApi.deleteCourier(login, password);

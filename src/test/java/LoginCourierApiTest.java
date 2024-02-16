@@ -12,7 +12,7 @@ import java.util.Random;
 import static org.junit.Assert.assertEquals;
 
 
-public class LoginCourierApiTest extends Constant{
+public class LoginCourierApiTest {
 
     Random random = new Random();
     int randomNumber = random.nextInt(100);
@@ -21,9 +21,10 @@ public class LoginCourierApiTest extends Constant{
     CreateCourierApi createCourierApi = new CreateCourierApi();
     LoginCourierApi loginCourierApi = new LoginCourierApi();
 
+    BaseUrl baseUrl = new BaseUrl();
     @Before
     public void setUp() {
-        RestAssured.baseURI = BASEURI;
+        baseUrl.getBaseUrl();
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         deleteCourierApi.deleteCourier(login, password);
         createCourierApi.createCourier(login, password, "Potter");
@@ -75,8 +76,6 @@ public class LoginCourierApiTest extends Constant{
 
 
     @After // Удаление курьера
-    @DisplayName("deleteCourier") // имя
-    @Description("Удаление курьера") // описание
     public void deleteCourierTest() {
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         deleteCourierApi.deleteCourier(login, password);
