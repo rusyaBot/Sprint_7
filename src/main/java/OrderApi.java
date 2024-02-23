@@ -8,7 +8,7 @@ import static org.hamcrest.Matchers.equalTo;
 public class OrderApi {
     private final String apiPath = "/api/v1/orders";
 
-    public int creatOrder(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color) {
+    public Response creatOrder(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color) {
         Order order = new Order(firstName, lastName, address, metroStation, phone, rentTime, deliveryDate, comment, color);
         Response response = given()
                 .header("Content-type", "application/json") // заполнил header
@@ -16,7 +16,7 @@ public class OrderApi {
                 .when()
                 .post(apiPath)// отправить запрос в ручку
                 .then().assertThat().extract().response(); // проверить статус
-        return (int) response.statusCode();
+        return response;
     }
 
     public int creatOrderGetTrack(String firstName, String lastName, String address, String metroStation, String phone, int rentTime, String deliveryDate, String comment, List<String> color) {
@@ -50,13 +50,5 @@ public class OrderApi {
                 .and().body("order.color", equalTo(color))
                 .and().body("order.track", equalTo(orderTrack));
     }
-
-    public Response ordersListNotNull() {
-        Response response =
-                given()
-                        .get(apiPath);
-        return response;
-    }
-
 
 }

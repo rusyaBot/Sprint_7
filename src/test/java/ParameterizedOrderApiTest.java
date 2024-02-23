@@ -1,15 +1,14 @@
-
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
-
+import io.restassured.response.Response;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
+
 import java.util.List;
 
-import static org.junit.Assert.assertEquals;
+import static org.hamcrest.Matchers.notNullValue;
 
 @RunWith(Parameterized.class)
 public class ParameterizedOrderApiTest {
@@ -35,15 +34,17 @@ public class ParameterizedOrderApiTest {
     }
 
     BaseUrl baseUrl = new BaseUrl();
+
     @Before
     public void setUp() {
-        baseUrl.getBaseUrl();}
+        baseUrl.getBaseUrl();
+    }
 
     @Test // Создание заказа. Ответ 201
     @DisplayName("createNewOrders") // имя теста
-    @Description("Создание заказа. Ответ 201") // описание теста
+    @Description("Создание заказа. Ответ 201 и тело ответа track не пусто") // описание теста
     public void createNewOrders() {
-        int statusCodeOrder = orderApi.creatOrder(
+        Response response = orderApi.creatOrder(
                 "Garri",
                 "Potter",
                 "Hogwarts 777",
@@ -53,7 +54,9 @@ public class ParameterizedOrderApiTest {
                 "2020-06-06",
                 "Valera, nastalo tvoyo vremya",
                 color);
-        assertEquals(statusCode, statusCodeOrder);
+        response.then().assertThat()
+                .statusCode(statusCode)
+                .and().body("track", notNullValue());
     }
 
     @Test // Создание-Ответ 201. Проверка заказа в списке -Ответ 200.

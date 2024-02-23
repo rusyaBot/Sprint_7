@@ -1,6 +1,5 @@
 import io.qameta.allure.Description;
 import io.qameta.allure.junit4.DisplayName;
-import io.restassured.RestAssured;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -60,7 +59,7 @@ public class CreateCourierApiTest {
     }
 
     @After // Удаление курьера
-    public void deleteCourierTest() {
+    public void deleteCourier() {
         DeleteCourierApi deleteCourierApi = new DeleteCourierApi();
         deleteCourierApi.deleteCourier(login, password);
     }
